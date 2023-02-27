@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from func_utils import format_number
 import time
+import json
 
 from pprint import pprint
 
@@ -57,6 +58,8 @@ def place_market_order(client, market, side, size, price, reduce_only):
         time_in_force="FOK",
         reduce_only=reduce_only   # False -> True: close the open position
     )
+
+    print("placed_order.data:", placed_order.data)
 
     # Return result
     return placed_order.data
@@ -120,6 +123,11 @@ def abort_all_positions(client):
 
             # Protect API
             time.sleep(0.2)
+
+        # Override json file with empty list
+        bot_agents = []
+        with open("bot_agents.json", "w") as f:
+            json.dump(bot_agents, f, indent=4)
 
         # Return closed orders
         return close_orders
